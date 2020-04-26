@@ -8,16 +8,48 @@
         <script>
             var domain = "meet.jit.si";
             var options = {
-                roomName: "JitsiMeetAPIExample",
-                width: 700,
-                height: 180,
+                roomName: "MiEjemploClubV",
+                width: 1400,
+                height: 700,
                 parentNode: undefined,
                 configOverwrite: {},
                 interfaceConfigOverwrite: {
-                    filmStripOnly: true
+                    INITIAL_TOOLBAR_TIMEOUT: 20000,
+                    TOOLBAR_TIMEOUT: 4000,
+                    TOOLBAR_ALWAYS_VISIBLE: false,
+                    DEFAULT_REMOTE_DISPLAY_NAME: 'Rubén Cahuich',
+                    DEFAULT_LOCAL_DISPLAY_NAME: 'Yo',
+                    SHOW_JITSI_WATERMARK: false,
+                    JITSI_WATERMARK_LINK: 'https://google.com',
+                    TOOLBAR_ALWAYS_VISIBLE: true,
+                    TOOLBAR_BUTTONS: [
+                        'microphone', 'camera', 'closedcaptions', 'desktop', 'fullscreen',
+                        'fodeviceselection', 'hangup', 'profile', 'info', 'chat', 'recording',
+                        'livestreaming', 'etherpad', 'sharedvideo', 'settings', 'raisehand',
+                        'videoquality', 'filmstrip', 'invite', 'feedback', 'stats', 'shortcuts',
+                        'tileview', 'videobackgroundblur', 'download', 'help', 'mute-everyone',
+                        'e2ee'
+                    ],
+                    filmStripOnly: false
                 }
             }
             var api = new JitsiMeetExternalAPI(domain, options);
+            var yourRoomPass = "147282";
+
+            setTimeout(() => {
+                // why timeout: I got some trouble calling event listeners without setting a timeout :)
+
+                // when local user is trying to enter in a locked room 
+                api.addEventListener('passwordRequired', () => {
+                    api.executeCommand('password', yourRoomPass);
+                });
+
+                // when local user has joined the video conference 
+                api.addEventListener('videoConferenceJoined', (response) => {
+                    api.executeCommand('password', yourRoomPass);
+                });
+
+            }, 10);
         </script>
     </body>
 </html>
